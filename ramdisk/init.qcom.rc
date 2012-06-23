@@ -457,7 +457,7 @@ service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
 #    class late_start
 #    oneshot
 
-on property:init.svc.bootanim=stopped
+on property:init.svc.samsungani=stopped
     start qcom-post-boot
 
 on property:sys.boot_completed=1
