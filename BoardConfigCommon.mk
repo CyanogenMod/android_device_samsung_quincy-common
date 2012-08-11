@@ -42,21 +42,14 @@ BOARD_HAS_NO_MISC_PARTITION := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
-# FIXME: Overlay has an issue on Quincy when playing video in landscape mode
-COMMON_GLOBAL_CFLAGS += -DQCOM_ROTATOR_KERNEL_FORMATS
-
 # Workaround for glitches while cropping bypass layers
 TARGET_NO_BYPASS_CROPPING := true
 
 # MTP
 BOARD_MTP_DEVICE := "/dev/usb_mtp_gadget"
 
-# Audio
-TARGET_USES_QCOM_LPA := true
-COMMON_GLOBAL_CFLAGS += -DWITH_QCOM_LPA
-
 # Disable MVS audio, it causes robot voice in GTalk
-COMMON_GLOBAL_CFLAGS += -DNO_QCOM_MVS
+#COMMON_GLOBAL_CFLAGS += -DNO_QCOM_MVS
 
 # Q1 hardware has a rear mic for camcorder
 BOARD_HAVE_BACK_MIC_CAMCORDER := true

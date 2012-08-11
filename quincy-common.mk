@@ -37,7 +37,8 @@ PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/ramdisk/init.target.rc:root/init.target.rc \
     device/samsung/quincy-common/ramdisk/initlogo.rle:root/initlogo.rle \
     device/samsung/quincy-common/ramdisk/ueventd.rc:root/ueventd.rc \
-	device/samsung/quincy-common/ramdisk/init.emmc.rc:root/init.emmc.rc
+	device/samsung/quincy-common/ramdisk/init.emmc.rc:root/init.emmc.rc \
+	device/samsung/quincy-common/ramdisk/fstab.qcom:root/fstab.qcom \
 
 # BT firmware
 PRODUCT_COPY_FILES += \
@@ -58,5 +59,5 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 # common msm8660
 $(call inherit-product, device/samsung/msm8660-common/msm8660.mk)
 
-$(call inherit-product, frameworks/base/build/phone-xhdpi-1024-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
