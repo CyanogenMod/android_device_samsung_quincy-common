@@ -46,7 +46,8 @@ PRODUCT_COPY_FILES += \
 
 # S-Pen IDC
 PRODUCT_COPY_FILES += \
-    device/samsung/quincy-common/idc/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc
+    device/samsung/quincy-common/idc/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc \
+    device/samsung/quincy-common/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc    
 
 # Vold configuration
 PRODUCT_COPY_FILES += \
