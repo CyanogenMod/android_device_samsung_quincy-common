@@ -46,11 +46,6 @@ on boot
     #camera
     chown system camera /sys/class/ledflash/sec_ledflash/torch
 
-# ko files for vibrator (block this cmd temporary. vibrato driver cause reset during boot)
-    insmod /system/lib/modules/vibrator.ko
-    chown system system /sys/class/timed_output/vibrator/enable
-    chmod 0664 /sys/class/timed_output/vibrator/enable    
-
 # on emmc mount the partition containing firmware
 on emmc-fs
     mount ext3 /dev/block/mmcblk0p24 /system remount rw
@@ -61,8 +56,6 @@ on emmc-fs
     mkdir /tombstones 0771 system system
     mount ext4 /dev/block/mmcblk0p27 /tombstones nosuid nodev barrier=1
 
-
-    write /sys/devices/i2c-0/0-0024/cyttsp_update_fw 1
 service kickstart /system/bin/qcks l
     oneshot
     disabled

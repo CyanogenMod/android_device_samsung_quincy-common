@@ -178,6 +178,12 @@ on post-fs-data
     # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
 
+    insmod /system/lib/modules/vibrator.ko
+    chown system system /sys/class/timed_output/vibrator/enable
+    chmod 0664 /sys/class/timed_output/vibrator/enable
+
+    write /sys/devices/i2c-0/0-0024/cyttsp_update_fw 1
+
     setprop vold.post_fs_data_done 1
 
 # Export GPIO56 for fusion targets to enable/disable hub
