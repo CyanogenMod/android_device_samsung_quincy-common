@@ -52,10 +52,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/vold.fstab:system/etc/vold.fstab
 
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mass_storage
-
 # common msm8660
 $(call inherit-product, device/samsung/msm8660-common/msm8660.mk)
 

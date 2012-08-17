@@ -42,15 +42,6 @@ BOARD_HAS_NO_MISC_PARTITION := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
-# Workaround for glitches while cropping bypass layers
-TARGET_NO_BYPASS_CROPPING := true
-
-# MTP
-BOARD_MTP_DEVICE := "/dev/usb_mtp_gadget"
-
-# Disable MVS audio, it causes robot voice in GTalk
-#COMMON_GLOBAL_CFLAGS += -DNO_QCOM_MVS
-
 # Q1 hardware has a rear mic for camcorder
 BOARD_HAVE_BACK_MIC_CAMCORDER := true
 
