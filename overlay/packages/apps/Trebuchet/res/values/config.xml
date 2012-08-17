@@ -22,7 +22,7 @@
     <!--<string name="config_workspaceDefaultTransitionEffect">Tablet</string>-->
 
     <!-- Whether to fade the adjacent screens when scrolling -->
-    <bool name="config_workspaceDefualtFadeInAdjacentScreens">true</bool>
+    <!--<bool name="config_workspaceDefualtFadeInAdjacentScreens">true</bool>-->
 
     <!-- Workspace grid size -->
     <integer name="cell_count_x">5</integer>
