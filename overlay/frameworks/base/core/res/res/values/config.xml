@@ -174,4 +174,7 @@
     <!-- The restoring is handled by modem if it is true-->
     <bool name="skip_restoring_network_selection">true</bool>
 
+    <!-- Enable the electron beam animation -->
+    <bool name="config_animateScreenLights">false</bool>
+
 </resources>
