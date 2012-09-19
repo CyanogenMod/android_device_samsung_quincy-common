@@ -29,6 +29,10 @@ DEVICE_PACKAGE_OVERLAYS += device/samsung/quincy-common/overlay
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
+# Hardware
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml 
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
