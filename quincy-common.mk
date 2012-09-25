@@ -60,6 +60,10 @@ PRODUCT_COPY_FILES += \
 # QRNGD
 PRODUCT_PACKAGES += qrngd
 
+# Common features
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:system/etc/permissions/android.hardware.sensor.barometer.xml
+
 # common msm8660
 $(call inherit-product, device/samsung/msm8660-common/msm8660.mk)
 
