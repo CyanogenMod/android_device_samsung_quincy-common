@@ -33,17 +33,6 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml 
 
-# Ramdisk
-PRODUCT_COPY_FILES += \
-    device/samsung/quincy-common/ramdisk/init.qcom.rc:root/init.qcom.rc \
-    device/samsung/quincy-common/ramdisk/init.qcom.sh:root/init.qcom.sh \
-    device/samsung/quincy-common/ramdisk/init.qcom.usb.sh:root/init.qcom.usb.sh \
-    device/samsung/quincy-common/ramdisk/init.target.rc:root/init.target.rc \
-    device/samsung/quincy-common/ramdisk/initlogo.rle:root/initlogo.rle \
-    device/samsung/quincy-common/ramdisk/ueventd.rc:root/ueventd.rc \
-	device/samsung/quincy-common/ramdisk/init.emmc.rc:root/init.emmc.rc \
-	device/samsung/quincy-common/ramdisk/fstab.qcom:root/fstab.qcom \
-
 # BT firmware
 PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/firmware/bcm4330B1.hcd:system/etc/firmware/bcm4330B1.hcd
@@ -56,6 +45,13 @@ PRODUCT_COPY_FILES += \
 # Vold configuration
 PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/vold.fstab:system/etc/vold.fstab
+
+# Ramdisk
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.qcom.rc \
+    init.target.rc \
+    ueventd.qcom.rc
 
 # QRNGD
 PRODUCT_PACKAGES += qrngd

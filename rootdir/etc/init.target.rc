@@ -1,38 +1,83 @@
+# Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of Code Aurora Forum, Inc. nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
 on early-init
-    mkdir /storage 0050 system sdcard_r
-    mkdir /storage/sdcard0 0000 system system
-    mkdir /storage/sdcard1 0000 system system
-
-# for backwards compatibility
-    symlink /storage/sdcard0 /mnt/sdcard
-    symlink /storage/sdcard0 /sdcard
-    symlink  /storage/sdcard1 /external_sd
-    symlink  /storage/sdcard1 /mnt/external_sd
-
-    mkdir /mnt/usbdisk 0755 system system
-
-    export EXTERNAL_STORAGE /storage/sdcard0
-    export SECONDARY_STORAGE /storage/sdcard1
-
-# Vibetonz
-    export VIBE_PIPE_PATH /dev/pipes
-    mkdir /dev/pipes 0771 shell shell
-
-on early-fs
-    mkdir /system
-    mkdir /data 0771 system system
-    mkdir /persist 0771 system system
-    mkdir /cache 0771 system cache
-    mkdir /config 0500 root root
+    mkdir /firmware 0771 system system
+    symlink /data/tombstones /tombstones
     mkdir /efs 0771 system system
 
-# insmod the modules
-    # ko files for bthid
-    insmod /lib/modules/bthid.ko
+on fs
+    mount_all fstab.qcom
 
-on emmc-fs
-# mount mmc partitions
-    mount_all /fstab.qcom
+    # Keeping following partitions outside fstab file. As user may not have
+    # these partition flashed on the device. Failure to mount any partition in fstab file
+    # results in failure to launch late-start class.
+    wait /dev/block/mmcblk0p26
+    mount ext4 /dev/block/mmcblk0p26 /cache nosuid nodev barrier=1
+
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+    mkdir /tombstones/mdm 0771 system system
+    mkdir /tombstones/lpass 0771 system system
+    wait /dev/block/mmcblk0p13
+    mount vfat /dev/block/mmcblk0p13 /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    start modem_link
+
+on boot
+    chown system system /dev/accelerometer
+    chown system system /dev/akm8975
+    chmod 664	/dev/accelerometer
+    chmod 664	/dev/akm8975
+    chown system system /sys/class/K3G_GYRO-dev/k3g/gyro_selftest_dps
+    chown system system /sys/class/sec/gsensorcal/calibration
+    chown system system /sys/class/proximity/proximity/proximity_avg
+    chown system system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_selftest
+    chown system system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_get_temp
+    chown system system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_power_on
+    chown system system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_selftest_dps
+    chown system system /sys/devices/virtual/accelerometer/accelerometer/acc_file
+    chown system system /sys/devices/virtual/sec/gsensorcal/calibration
+    chown system system /sys/class/sensors/barometer_sensor/sea_level_pressure
+    chown system system /sys/class/sensors/barometer_sensor/eeprom_check
+
+    #camera
+    chown system camera /sys/class/ledflash/sec_ledflash/torch
+
+# on emmc mount the partition containing firmware
+on post-fs-data 
+    mount ext3 /dev/block/mmcblk0p24 /system remount rw
+    mkdir /system/etc/firmware/misc 0771 system system
+    mkdir /system/etc/firmware/misc_mdm 0771 system system
+    exec /system/bin/sh /system/etc/init.qcom.modem_links.sh
+    mount ext4 /dev/block/mmcblk0p24 /system remount ro barrier=0
+    mkdir /tombstones 0771 system system
+    mount ext4 /dev/block/mmcblk0p27 /tombstones nosuid nodev barrier=1
 
     chown radio system /efs
     chmod 0771 /efs
@@ -50,13 +95,13 @@ on emmc-fs
     write /sys/block/mmcblk0/queue/iosched/front_merges 0
     write /sys/block/mmcblk0/queue/iosched/read_expire 100
     write /sys/block/mmcblk0/queue/iosched/write_expire 1000
-
+    
     mkdir /data/radio 0770 radio radio
     mkdir /data/misc/radio 0775 radio system
     mkdir /data/misc/sensors 0775 root root
     write /data/system/sensors/settings 0
     chmod 0664 /data/system/sensors/settings
-
+    
     # for parameter
     chown system radio /dev/block/mmcblk0p12
     chmod 0660 /dev/block/mmcblk0p12
@@ -93,7 +138,7 @@ on emmc-fs
     chown system media_rw /sys/class/mdnie/mdnie/mode
     chown system media_rw /sys/class/mdnie/mdnie/outdoor
     chown media system /sys/devices/virtual/jack/jack_reselector/reselect_jack
-
+    
     chown radio system /sys/devices/virtual/misc/melfas_touchkey/touch_sensitivity
     chown radio system /sys/devices/virtual/misc/melfas_touchkey/enable_disable
     chown radio system /sys/devices/virtual/misc/melfas_touchkey/touch_update
@@ -104,7 +149,7 @@ on emmc-fs
     chown radio system /sys/devices/virtual/sec/sec_touchkey/touchkey_firm_update_status
     chown radio system /sys/devices/virtual/sec/sec_touchkey/touchkey_firm_update
     chown radio system /sys/devices/virtual/sec/sec_touchkey/touchkey_brightness
-
+    
 # Permissions for TSP
    chown radio system /sys/devices/virtual/sec/tsp_noise_test/set_firm_version
    chown radio system /sys/devices/virtual/sec/tsp_noise_test/set_threshold
@@ -178,7 +223,7 @@ on emmc-fs
     chown radio system /sys/class/power_supply/battery/batt_wifi
     chown radio system /sys/class/power_supply/battery/gps
     chown radio system /sys/class/power_supply/battery/device_state
-
+    
 # allow system to modify cpufreq control files
     chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -291,16 +336,58 @@ service secril-daemon /system/bin/sec-ril
     user root
     group radio cache inet misc audio sdcard_rw qcom_diag log
 
-# for datarouter
-#service DR-daemon /system/bin/drexe
+service kickstart /system/bin/qcks l
+    oneshot
+    disabled
+
+# Start kickstart if csfb or svlte2a target
+on property:ro.baseband=csfb
+    wait /dev/ttyHSL1
+    mkdir /data/qcks 0770 system system
+    exec /system/bin/sh /system/etc/init.qcom.mdm_links.sh
+    start kickstart
+
+on property:ro.baseband=svlte2a
+    wait /dev/ttyHSL1
+    mkdir /data/qcks 0770 system system
+    exec /system/bin/sh /system/etc/init.qcom.mdm_links.sh
+    start kickstart
+
+service modem_link /system/bin/sh /system/etc/init.qcom.modem_links.sh
+    class main
+    user root
+    disabled
+    oneshot
+
+service dcvsd0 /system/bin/dcvsd -c 0 -f /data/misc/dcvsd/dcvsd0.conf
+    user root
+    disabled
+
+service dcvsd1 /system/bin/dcvsd -c 1 -f /data/misc/dcvsd/dcvsd1.conf
+    user root
+    disabled
+
+service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
+    user root
+    disabled
+
+#service thermald /system/bin/thermald
 #    class main
 #    user root
-#    group system radio inet net_raw
+#    group root
 
-# Vibetonz
-service immvibed /system/bin/immvibed
-    class core
-    user shell
-    group shell
-    oneshot
+# qrngd will drop permissions after startup
+service qrngd /system/bin/qrngd -f
+    class main
+    user root
+    group root
+
+on property:ro.baseband=svlte2a
+   setprop ro.config.ehrpd true
+   setprop ro.ril.svlte1x true
+
+on property:sys.radio.shutdown=true
+   exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
+   user root
+   group root
 

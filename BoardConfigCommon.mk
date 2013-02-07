@@ -25,13 +25,15 @@
 # against the traditional rules of inheritance).
 USE_CAMERA_STUB := true
 
+BOARD_FAMILY := quincy
+
 # inherit from common msm8660
 -include device/samsung/msm8660-common/BoardConfigCommon.mk
 
 # Kernel
 BOARD_KERNEL_CMDLINE        := androidboot.hardware=qcom usb_id_pin_rework=true zcache
 BOARD_KERNEL_BASE           := 0x48000000
-BOARD_FORCE_RAMDISK_ADDRESS := 0x49400000
+BOARD_MKBOOTIMG_ARGS        := --ramdisk_offset 0x01400000
 BOARD_KERNEL_PAGESIZE       := 2048
 
 BOARD_SDCARD_DEVICE_PRIMARY := /dev/block/mmcblk1p1
