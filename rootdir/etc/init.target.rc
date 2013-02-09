@@ -41,6 +41,10 @@ on fs
     mount ext4 /dev/block/mmcblk0p26 /cache nosuid nodev barrier=1
 
 on post-fs-data
+    insmod /system/lib/modules/vibrator.ko
+    chown system system /sys/class/timed_output/vibrator/enable
+    chmod 644 /sys/class/timed_output/vibrator/enable
+
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/mdm 0771 system system
