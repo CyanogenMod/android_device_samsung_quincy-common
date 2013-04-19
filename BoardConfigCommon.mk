@@ -33,7 +33,7 @@ BOARD_FAMILY := quincy
 # Kernel
 BOARD_KERNEL_CMDLINE        := androidboot.hardware=qcom usb_id_pin_rework=true zcache
 BOARD_KERNEL_BASE           := 0x48000000
-BOARD_MKBOOTIMG_ARGS        := --ramdisk_offset 0x01400000
+BOARD_MKBOOTIMG_ARGS        := --ramdisk_offset 0x01600000
 BOARD_KERNEL_PAGESIZE       := 2048
 
 BOARD_SDCARD_DEVICE_PRIMARY := /dev/block/mmcblk1p1
