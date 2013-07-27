@@ -42,13 +42,8 @@ PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/idc/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc \
     device/samsung/quincy-common/idc/sec_touchscreen.idc:system/usr/idc/sec_touchscreen.idc    
 
-# Vold configuration
-PRODUCT_COPY_FILES += \
-    device/samsung/quincy-common/vold.fstab:system/etc/vold.fstab
-
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.qcom \
     init.qcom.rc \
     init.target.rc \
     ueventd.qcom.rc
