@@ -33,10 +33,6 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml 
 
-# BT firmware
-PRODUCT_COPY_FILES += \
-    device/samsung/quincy-common/firmware/bcm4330B1.hcd:system/etc/firmware/bcm4330B1.hcd
-
 # S-Pen IDC
 PRODUCT_COPY_FILES += \
     device/samsung/quincy-common/idc/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc \
@@ -50,6 +46,10 @@ PRODUCT_PACKAGES += \
 
 # QRNGD
 PRODUCT_PACKAGES += qrngd
+
+# Bootanimation
+TARGET_SCREEN_WIDTH := 800
+TARGET_SCREEN_HEIGHT := 1280
 
 # Common features
 PRODUCT_COPY_FILES += \

@@ -41,10 +41,6 @@ on fs
     mount ext4 /dev/block/mmcblk0p26 /cache nosuid nodev barrier=1
 
 on post-fs-data
-    insmod /system/lib/modules/vibrator.ko
-    chown system system /sys/class/timed_output/vibrator/enable
-    chmod 644 /sys/class/timed_output/vibrator/enable
-
     mkdir /data/tombstones 0771 system system
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/mdm 0771 system system
@@ -70,8 +66,17 @@ on boot
     chown system system /sys/class/sensors/barometer_sensor/sea_level_pressure
     chown system system /sys/class/sensors/barometer_sensor/eeprom_check
 
+    #bln
+    chown system system /sys/class/misc/backlightnotification/notification_led
+    chown system system /sys/class/misc/backlightnotification/enabled
+
     #camera
     chown system camera /sys/class/ledflash/sec_ledflash/torch
+
+# ko files for vibrator (block this cmd temporary. vibrato driver cause reset during boot)
+    insmod /system/lib/modules/vibrator.ko
+    chown system system /sys/class/timed_output/vibrator/enable
+    chmod 0664 /sys/class/timed_output/vibrator/enable
 
 # on emmc mount the partition containing firmware
 on post-fs-data 
@@ -80,6 +85,8 @@ on post-fs-data
     mkdir /system/etc/firmware/misc_mdm 0771 system system
     exec /system/bin/sh /system/etc/init.qcom.modem_links.sh
     mount ext4 /dev/block/mmcblk0p24 /system remount ro barrier=0
+
+    write /sys/devices/i2c-0/0-0024/cyttsp_update_fw 1
 
     chown radio system /efs
     chmod 0771 /efs
