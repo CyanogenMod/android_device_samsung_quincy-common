@@ -22,7 +22,4 @@
 
     <string name="flashDevice">/sys/devices/virtual/ledflash/sec_ledflash/torch</string>
     <integer name="valueOn">1</integer>
- 
-    <!-- If the device does not support high brightness mode, disable this -->
-    <bool name="hasHighBrightness">false</bool>
 </resources>
